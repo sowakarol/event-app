@@ -1,0 +1,21 @@
+{
+  "rules": {
+    "no-console": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "next"
+      }
+    ],
+    "comma-dangle": ["error", "always"]
+  },
+  "env": {
+    "node": true,
+    "mocha": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 11
+  },
+  "extends": ["airbnb-base"]
+}
