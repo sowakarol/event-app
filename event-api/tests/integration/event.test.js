@@ -4,6 +4,15 @@ import { expect } from "chai";
 import app from "../../src/app";
 
 describe("Event API", () => {
+
+  describe("GET api/_healtcheck", () => {
+    it("should respond with OK 200 status", async () => {
+      const res = await request(app)
+        .get("/api/_healthcheck")
+        .expect(OK);
+    });
+  });
+
   describe("POST /api/v1/events/", () => {
     it("should create a new event when request is ok", async () => {
       const res = await request(app)
