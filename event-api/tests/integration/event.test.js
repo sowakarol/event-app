@@ -4,18 +4,15 @@ import { expect } from "chai";
 import app from "../../src/app";
 
 describe("Event API", () => {
-
   describe("GET api/_healtcheck", () => {
     it("should respond with OK 200 status", async () => {
-      const res = await request(app)
-        .get("/api/_healthcheck")
-        .expect(OK);
+      const res = await request(app).get("/api/_healthcheck").expect(OK);
     });
   });
 
   describe("POST /api/v1/events/", () => {
-    it("should create a new event when request is ok", async () => {
-      const res = await request(app)
+    it("should create a new event when request is ok", (done) => {
+      request(app)
         .post("/api/v1/events/")
         .send({
           firstName: "test",
@@ -23,15 +20,18 @@ describe("Event API", () => {
           email: "test@test.pl",
           eventDate: new Date(1995, 11, 17, 3, 24, 0).toJSON(),
         })
-        .expect(CREATED);
-      expect(res.status).to.equal(CREATED);
-      expect(res.body).to.have.property("firstName", "test");
-      expect(res.body).to.have.property("lastName", "test");
-      expect(res.body).to.have.property("email", "test@test.pl");
-      expect(res.body).to.have.property(
-        "eventDate",
-        "1995-12-17T02:24:00.000Z"
-      );
+        .expect(CREATED)
+        .then((res) => {
+          expect(res.status).to.equal(CREATED);
+          expect(res.body).to.have.property("firstName", "test");
+          expect(res.body).to.have.property("lastName", "test");
+          expect(res.body).to.have.property("email", "test@test.pl");
+          expect(res.body).to.have.property(
+            "eventDate",
+            "1995-12-17T03:24:00.000Z"
+          );
+          done();
+        });
     });
   });
 
