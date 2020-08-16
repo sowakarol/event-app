@@ -1,7 +1,7 @@
 import { CREATED, OK } from "http-status";
 import { expect } from "chai";
-import { EventController } from "../../../../src/api/controllers/event.controller";
 import { stub, spy } from "sinon";
+import { EventController } from "../../../../src/api/controllers/event.controller";
 
 describe("Event Controller", () => {
   let serviceMock = {
