@@ -1,29 +1,30 @@
-import { OK, CREATED, INTERNAL_SERVER_ERROR } from "http-status";
+import { OK, CREATED } from "http-status";
 
 export class EventController {
   constructor(eventService) {
     this.eventService = eventService;
   }
-  async createEvent(req, res) {
+  async createEvent(req, res, next) {
     console.info("Async EventController/createEvent request", req.body);
     try {
       const savedEvent = await this.eventService.create(req.body);
-      res.status(CREATED).json(savedEvent);
+      res.status(CREATED).json(savedEvent).end();
     } catch (err) {
-      console.error("Async EventController/createEvent request error", err);
-      res.status(INTERNAL_SERVER_ERROR);
+      console.error("Async EventController/createEvent error", err);
+      next(err);
     }
-    res.status(CREATED).end();
   }
   async getAllEvents(req, res) {
     try {
-      const events = await this.eventService.getAllEvents();
-      res.json(events);
+      const events = await this.eventService.getAll();
+      res.status(OK).json(events).end();
     } catch (err) {
-      console.error(err);
+      console.error("Async EventController/getAllEvents error", err);
+      next(err);
     }
   }
-  async getEvent(req, res) {}
-  async updateEvent(req, res) {}
-  async deleteEvent(req, res) {}
+
+  async getEvent(req, res, next) {}
+  async updateEvent(req, res, next) {}
+  async deleteEvent(req, res, next) {}
 }
