@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  event-api-integration-test:
+    container_name: event-api-integration-test
+    build:
+      context: .
+      target: test
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 5000:5000
+    networks:
+      - webnet-integration-test
+    depends_on:
+      - mongo-integration-test
+
+  mongo-integration-test:
+    image: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - webnet-integration-test
+
+networks:
+  webnet-integration-test:

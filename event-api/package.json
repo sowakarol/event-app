@@ -4,8 +4,12 @@
   "description": "",
   "main": "./src/app.js",
   "scripts": {
-    "start": "nodemon --exec babel-node ./src/app.js",
-    "test": "mocha --require @babel/register --require @babel/polyfill tests/**/**/*.js --exit"
+    "start": "node ./src/app.js",
+    "start:dev": "nodemon --exec babel-node ./src/app.js",
+    "start:debug": "node --inspect 0.0.0.0:9229 babel-node ./src/app.js",
+    "test:integration": "docker-compose -f docker-compose-test.yml up --build -V",
+    "test:unit": "mocha --require @babel/register --require @babel/polyfill tests/unit/**/*.js --exit",
+    "mocha:integration": "mocha --require @babel/register --require @babel/polyfill ./tests/integration/**/*.js --exit"
   },
   "author": "sowakarol",
   "license": "ISC",
@@ -26,6 +30,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^4.0.0",
-    "http-status": "^1.4.2"
+    "http-status": "^1.4.2",
+    "mongoose": "^5.10.0"
   }
 }
