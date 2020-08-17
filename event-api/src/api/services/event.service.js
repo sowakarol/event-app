@@ -38,17 +38,50 @@ export class EventService {
     try {
       let event = CreateEventDto.toEntity(createEventDto);
       await event.save();
-      console.info("Async EventService/create event created", event);
       return EventDto.fromEntity(event);
     } catch (err) {
-      console.error("Async EventService/create error", err);
-      throw Error(err);
+      console.warn("Async EventService create error", err);
+      throw err;
     }
   }
-  async update() {}
-  async get() {}
+
   async getAll() {
     const events = await Event.find();
     return events.map((event) => EventDto.fromEntity(event));
+  }
+
+  async update(id, eventDto) {
+    try {
+      const updatedEntity = await Event.findByIdAndUpdate(id, eventDto, {
+        new: true,
+      });
+
+      return EventDto.fromEntity(updatedEntity);
+    } catch (err) {
+      console.warn("Async EventService update error", err);
+      throw err;
+    }
+  }
+  async delete(id) {
+    try {
+      await Event.findByIdAndRemove(id);
+    } catch (err) {
+      console.warn("Async EventService delete error", err);
+      throw err;
+    }
+  }
+  async get(id) {
+    try {
+      const event = await Event.findById(id);
+
+      if (!event) {
+        return;
+      }
+
+      return EventDto.fromEntity(event);
+    } catch (err) {
+      console.warn("Async EventService get error", err);
+      throw err;
+    }
   }
 }
