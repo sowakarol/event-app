@@ -1,0 +1,60 @@
+version: "3.7"
+
+services:
+  event-api:
+    container_name: event-api
+    build:
+      context: ./event-api
+      target: development
+    volumes:
+      - ./event-api:/usr/src/app
+    ports:
+      - ${EVENT_API_PORT}:5000
+      - ${EVENT_API_DEBUGGER_PORT}:9229
+    command: npm run start:dev
+    env_file:
+      - .env
+    networks:
+      - webnet
+    depends_on:
+      - mongo
+
+
+  event-frontend:
+    container_name: event-frontend
+    build:
+      context: ./event-frontend
+      target: development
+    ports:
+      - ${EVENT_FRONTEND_PORT}:3000
+    volumes:
+      - ./event-frontend:/usr/src/app
+    command: npm start
+    env_file:
+      - .env
+    networks:
+      - webnet
+    tty:
+      true
+    depends_on:
+      - event-api
+
+  mongo:
+    image: mongo
+    networks:
+      - webnet
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    networks:
+      - webnet
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+
+networks:
+  webnet:
