@@ -1,46 +1,47 @@
 import { CREATED, OK } from "http-status";
 import { expect } from "chai";
-import { stub, spy } from "sinon";
+import { stub, spy, assert } from "sinon";
 import { EventController } from "../../../../src/api/controllers/event.controller";
 
 describe("Event Controller", () => {
-  let serviceMock = {
-    create: spy(),
-  };
-  let eventController = new EventController(serviceMock);
+  let serviceMock = {};
 
   let req = {};
   let res = {};
-  let event = {
-    firstName: "test",
-    lastName: "test",
-    email: "test@test.pl",
-    eventDate: new Date(1995, 11, 17, 3, 24, 0).toJSON(),
-  };
-
+  let next = {};
+  
   beforeEach(() => {
     req = {};
     res = {
-      json: spy(),
-      status: stub().returns({ end: spy() }),
+      status: stub().returns({ json: stub().returns({ end: spy() }) }),
+    };
+    next = spy();
+    serviceMock = {
+      create: spy(),
     };
   });
 
   describe("createEvent", () => {
-    it("should not fail and return event when request.body is ok", async () => {
-      req.body = event;
-      await eventController.createEvent(req, res);
+    it("should not fail and return 201 when request.body is ok", async () => {
+      const eventController = new EventController(serviceMock);
+
+      await eventController.createEvent(req, res, next);
 
       expect(serviceMock.create.calledOnce).to.equal(true);
-      expect(res.status.calledWith).to.equal(CREATED);
 
-      expect(res.body).to.have.property("firstName", "test");
-      expect(res.body).to.have.property("lastName", "test");
-      expect(res.body).to.have.property("email", "test@test.pl");
-      expect(res.body).to.have.property(
-        "eventDate",
-        "1995-12-17T02:24:00.000Z"
-      );
+      expect(res.status.calledOnce).to.equal(true);
+      expect(res.status.getCall(0).args[0]).to.equal(CREATED);
+    });
+
+    it("should call next when eventService throws", async () => {
+      serviceMock.create = stub().throws();
+      const eventController = new EventController(serviceMock);
+
+      await eventController.createEvent(req, res, next);
+
+      expect(serviceMock.create.calledOnce).to.equal(true);
+
+      expect(next.calledOnce).to.equal(true);
     });
   });
 });
