@@ -9,7 +9,7 @@ import eventReducer from "./reducers/eventReducer";
 import initialState from "./reducers/initialState";
 
 const store = createStore(
-  combineReducers({ form: eventReducer }),
+  combineReducers({ eventForm: eventReducer }),
   initialState,
   applyMiddleware(thunk)
 );
