@@ -1,0 +1,10 @@
+// event creation
+export const CREATE_EVENT = "CREATE_EVENT";
+export const CREATE_EVENT_SUCCESS = "CREATE_EVENT_SUCCESS";
+export const CREATE_EVENT_FAILED = "CREATE_EVENT_FAILED";
+
+// event form
+export const SAVE_EVENT_FORM = "SAVE_EVENT_FORM";
+export const UPDATE_EVENT_FORM_FIELD = "UPDATE_EVENT_FORM_FIELD";
+export const EDIT_FORM_PENDING = "EDIT_FORM_PENDING";
+export const INIT_EDIT_FORM = "INIT_EDIT_FORM";
