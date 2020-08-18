@@ -4,7 +4,6 @@ import { Grid } from "@material-ui/core";
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { EventFormHeader } from "./components/EventFromHeader/EventFormHeader";
-import "./App.css";
 
 function App() {
   return (
