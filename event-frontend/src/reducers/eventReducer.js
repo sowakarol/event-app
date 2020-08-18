@@ -1,4 +1,4 @@
-import * as constants from "../actions/constants";
+import * as constants from "../constants/constants";
 import initialState from "./initialState";
 
 function eventFormReducer(state = initialState.eventForm, action) {

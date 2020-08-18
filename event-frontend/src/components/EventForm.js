@@ -90,7 +90,7 @@ class EventForm extends Component {
               <TextField
                 type="text"
                 id="first-name"
-                placeholder="First Name"
+                label="First Name"
                 value={this.props.firstName}
                 onChange={this.changeFirstName}
                 // error={this.props.errors}
@@ -103,7 +103,7 @@ class EventForm extends Component {
               <TextField
                 type="text"
                 id="last-name"
-                placeholder="Last Name"
+                label="Last Name"
                 value={this.props.lastName}
                 onChange={this.changeLastName}
                 // error={this.props.errors}
@@ -116,7 +116,7 @@ class EventForm extends Component {
               <TextField
                 type="email"
                 id="email"
-                placeholder="Email"
+                label="Email"
                 value={this.props.email}
                 onChange={this.changeEmail}
                 // error={this.props.errors}

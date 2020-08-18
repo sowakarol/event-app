@@ -1,4 +1,4 @@
-import * as constants from "./constants";
+import * as constants from "../constants/constants";
 
 export const initEventForm = (form) => ({
   type: constants.INIT_EDIT_FORM,
