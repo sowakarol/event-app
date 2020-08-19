@@ -5,27 +5,23 @@ export const initEventForm = (form) => ({
   form,
 });
 
+export const createEvent = (form) => ({
+  type: constants.CREATE_EVENT,
+  form,
+});
+
 export const createEventSuccess = (form) => ({
   type: constants.CREATE_EVENT_SUCCESS,
   form,
 });
 
-export const createEventFailed = (error) => ({
+export const createEventFailed = (errors) => ({
   type: constants.CREATE_EVENT_FAILED,
-  error,
+  errors,
 });
 
 export const updateEventFormField = (fieldName, fieldValue) => ({
   type: constants.UPDATE_EVENT_FORM_FIELD,
   fieldName,
   fieldValue,
-});
-
-export const saveEventForm = (form) => ({
-  type: constants.SAVE_EVENT_FORM,
-  form,
-});
-
-export const editFormPending = () => ({
-  type: constants.EDIT_FORM_PENDING,
 });

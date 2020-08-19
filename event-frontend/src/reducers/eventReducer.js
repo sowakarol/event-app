@@ -15,26 +15,32 @@ function eventFormReducer(state = initialState.eventForm, action) {
       return {
         ...state,
         changed: false,
+        saved: false,
         data: action.form,
       };
-    case constants.EDIT_FORM_PENDING:
+    case constants.CREATE_EVENT:
       return {
         ...state,
-        status: constants.EDIT_FORM_PENDING,
+        status: constants.CREATE_EVENT,
+        waiting: true,
       };
     case constants.CREATE_EVENT_SUCCESS:
       return {
         ...state,
         changed: false,
         data: action.form,
+        errors: null,
+        saved: true,
         status: constants.CREATE_EVENT_SUCCESS,
+        waiting: false,
       };
     case constants.CREATE_EVENT_FAILED:
       return {
         ...state,
         changed: false,
-        data: action.error,
+        errors: action.errors,
         status: constants.CREATE_EVENT_FAILED,
+        waiting: false,
       };
     default:
       return state;

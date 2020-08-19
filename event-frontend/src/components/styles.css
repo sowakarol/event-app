@@ -1,4 +1,14 @@
 .EventForm {
-    text-align: center;
-    margin-top: 5%;
+  text-align: center;
+  margin-top: 5%;
+}
+
+.center {
+  text-align: center;
+  margin-top: 5%;
+}
+
+.error {
+  text-align: center;
+  color: red;
 }
