@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export default {
+const initialState = {
   eventForm: {
     status: null,
     data: {
@@ -14,3 +14,5 @@ export default {
     waiting: false,
   },
 };
+
+export default initialState;

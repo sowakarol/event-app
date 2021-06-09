@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es6": true,
+        "jest": true
     },
     "extends": [
         "plugin:react/recommended",
@@ -11,12 +12,14 @@
         "ecmaFeatures": {
             "jsx": true
         },
-        "ecmaVersion": 12,
+        "ecmaVersion": 2018,
         "sourceType": "module"
     },
     "plugins": [
         "react"
     ],
     "rules": {
+        "react/require-default-props": [2, { "ignoreFunctionalComponents": true }],
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
     }
 }

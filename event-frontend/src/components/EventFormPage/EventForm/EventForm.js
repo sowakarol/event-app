@@ -5,8 +5,6 @@ import {
   TextField,
   Grid,
   Button,
-  Backdrop,
-  CircularProgress,
 } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
 import { updateEventFormField } from '../../../actions/eventActions';
@@ -92,16 +90,10 @@ class EventForm extends Component {
       );
     }
 
-    const loader = (isOpen) => (
-      <Backdrop open={isOpen}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
-
     if (!eventForm) {
-      return LoadingSpinner({ 
+      return LoadingSpinner({
         isOpen: true,
-       })
+      });
     }
 
     const errorMessages = errors || [];
@@ -176,7 +168,7 @@ class EventForm extends Component {
             </Grid>
           </Grid>
         </form>
-        {isWaiting && loader(isWaiting)}
+        {isWaiting && <LoadingSpinner isOpen />}
       </div>
     );
   }

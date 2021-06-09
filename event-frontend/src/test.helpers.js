@@ -5,15 +5,15 @@ import thunk from 'redux-thunk';
 import { render as rtlRender } from '@testing-library/react';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import eventReducer from './reducers/eventReducer';
-import { initialState as reducerInitialState } from './reducers/initialState';
+import eventFormReducer from './reducers/eventFormReducer';
+import reducerInitialState from './reducers/initialState';
 
 function render(
   ui,
   {
     initialState = reducerInitialState,
     store = createStore(
-      combineReducers({ eventForm: eventReducer }),
+      combineReducers({ eventForm: eventFormReducer }),
       initialState,
       applyMiddleware(thunk),
     ),

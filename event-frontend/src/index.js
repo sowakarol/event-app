@@ -5,11 +5,11 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import './index.css';
 import App from './App';
-import eventReducer from './reducers/eventReducer';
+import eventFormReducer from './reducers/eventFormReducer';
 import initialState from './reducers/initialState';
 
 const store = createStore(
-  combineReducers({ eventForm: eventReducer }),
+  combineReducers({ eventForm: eventFormReducer }),
   initialState,
   applyMiddleware(thunk),
 );

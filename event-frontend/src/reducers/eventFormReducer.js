@@ -3,7 +3,7 @@ import initialState from './initialState';
 
 function eventFormReducer(state = initialState.eventForm, action) {
   switch (action.type) {
-    case constants.UPDATE_EVENT_FORM_FIELD:
+    case constants.UPDATE_EVENT_FORM_FIELD: {
       const newForm = { ...state.data };
       newForm[action.fieldName] = action.fieldValue;
       return {
@@ -11,6 +11,7 @@ function eventFormReducer(state = initialState.eventForm, action) {
         changed: true,
         data: newForm,
       };
+    }
     case constants.INIT_EDIT_FORM:
       return {
         ...state,
