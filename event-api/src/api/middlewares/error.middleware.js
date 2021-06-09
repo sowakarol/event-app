@@ -1,10 +1,10 @@
-import { ApiError } from "./apiError";
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from "http-status";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status';
+import { ApiError } from './apiError';
 
 const handleValidationErrorMongo = (err) => {
   const errors = Object.values(err.errors).map((item) => item.message);
 
-  const message = `Invalid input data. ${errors.join(". ")}`;
+  const message = `Invalid input data. ${errors.join('. ')}`;
   return new ApiError(message, BAD_REQUEST);
 };
 
@@ -15,20 +15,19 @@ const handleCastErrorMongo = (err) => {
 
 export default (err, req, res, next) => {
   let error = { ...err };
-  if (err.name === "ValidationError") {
+  if (err.name === 'ValidationError') {
     error = handleValidationErrorMongo(error);
   }
-  if (err.name === "CastError") {
+  if (err.name === 'CastError') {
     error = handleCastErrorMongo(error);
   }
 
-  error.statusCode =
-    error.statusCode || err.statusCode || INTERNAL_SERVER_ERROR;
+  error.statusCode = error.statusCode || err.statusCode || INTERNAL_SERVER_ERROR;
   error.message = error.message || err.message;
 
   // overwrite internal, maybe sensitive error messages
   if (error.statusCode === INTERNAL_SERVER_ERROR) {
-    error.message = "INTERNAL ERROR";
+    error.message = 'INTERNAL ERROR';
   }
 
   res.status(error.statusCode).json({

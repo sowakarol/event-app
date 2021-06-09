@@ -1,4 +1,4 @@
-FROM node:14 As test
+FROM node:14 AS test
 
 ENV NODE_ENV TEST
 
@@ -15,7 +15,7 @@ EXPOSE 5000
 CMD [ "npm", "run", "mocha:integration" ]
 
 
-FROM node:14 As development
+FROM node:14 AS development
 
 WORKDIR /usr/src/app
 

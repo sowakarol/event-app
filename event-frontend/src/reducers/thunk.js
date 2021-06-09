@@ -1,21 +1,21 @@
-import { getEventForm } from "./selectors";
-import eventService from "../service/event.service";
+import { getEventForm } from './selectors';
+import eventService from '../service/event.service';
 import {
   createEventSuccess,
   createEventFailed,
   createEvent,
   initEventForm,
-} from "../actions/eventActions";
+} from '../actions/eventActions';
 
-export function initForm() {
-  return function _initForm(dispatch, getState) {
+export const initForm = () => {
+  return (dispatch, getState) => {
     const form = getEventForm(getState());
     dispatch(initEventForm(form));
   };
 }
 
-export function saveForm() {
-  return function _saveForm(dispatch, getState) {
+export const saveForm = () => {
+  return (dispatch, getState) => {
     const form = getEventForm(getState());
     dispatch(createEvent(form));
 
@@ -24,29 +24,28 @@ export function saveForm() {
       .then((response) => {
         // expect only 201 responses
         if (response.status === 201) {
-          console.info("Server response", response.status, response.data);
+          console.info('Server response', response.status, response.data);
           return dispatch(createEventSuccess(response.data));
-        } else {
-          // treat unexpected response as internal error
-          console.error("Unexpected server status", response);
-          dispatch(createEventFailed(["Ooops, something went wrong!"]));
         }
+        // treat unexpected response as internal error
+        console.error('Unexpected server status', response);
+        dispatch(createEventFailed(['Ooops, something went wrong!']));
       })
       .catch((err) => {
         const resp = err.response;
 
         if (resp && resp.status && resp.data) {
-          let msg = resp.data.message;
+          const msg = resp.data.message;
           let errorMessages = null;
           if (resp.status === 400) {
-            errorMessages = msg.split(",");
+            errorMessages = msg.split(',');
             // handle parsing of express validator - TODO - move it to event-api + refactor completely
             errorMessages = errorMessages.map((el) => {
-              if (el.startsWith("body[")) {
-                el = el.replace(/body\[eventDate\]/g, "Event Date Field");
-                el = el.replace(/body\[email\]/g, "Email Field");
-                el = el.replace(/body\[firstName\]/g, "First Name Field");
-                el = el.replace(/body\[lastName\]/g, "Last Name Field");
+              if (el.startsWith('body[')) {
+                el = el.replace(/body\[eventDate\]/g, 'Event Date Field');
+                el = el.replace(/body\[email\]/g, 'Email Field');
+                el = el.replace(/body\[firstName\]/g, 'First Name Field');
+                el = el.replace(/body\[lastName\]/g, 'Last Name Field');
               }
               return el;
             });

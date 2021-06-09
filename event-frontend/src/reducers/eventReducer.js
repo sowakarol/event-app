@@ -1,5 +1,5 @@
-import * as constants from "../constants/constants";
-import initialState from "./initialState";
+import * as constants from '../constants/constants';
+import initialState from './initialState';
 
 function eventFormReducer(state = initialState.eventForm, action) {
   switch (action.type) {

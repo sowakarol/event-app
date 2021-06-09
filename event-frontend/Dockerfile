@@ -1,4 +1,4 @@
-FROM node:14 As development
+FROM node:14 AS development
 
 WORKDIR /usr/src/app
 
@@ -11,7 +11,7 @@ COPY . .
 
 CMD ["npm", "start"]
 
-FROM node:14 As production
+FROM node:14 AS production
 
 WORKDIR /usr/src/app
 

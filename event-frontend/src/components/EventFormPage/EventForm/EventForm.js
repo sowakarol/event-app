@@ -1,24 +1,25 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import moment from "moment";
-import { updateEventFormField } from "../actions/eventActions";
-import {
-  getEventForm,
-  getHasChanged,
-  getIsSaved,
-  getIsWaiting,
-  getErrors,
-} from "../reducers/selectors";
-import { saveForm, initForm } from "../reducers/thunk";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import moment from 'moment';
 import {
   TextField,
   Grid,
   Button,
   Backdrop,
   CircularProgress,
-} from "@material-ui/core";
-import { DateTimePicker } from "@material-ui/pickers";
-import "./styles.css";
+} from '@material-ui/core';
+import { DateTimePicker } from '@material-ui/pickers';
+import { updateEventFormField } from '../../../actions/eventActions';
+import {
+  getEventForm,
+  getHasChanged,
+  getIsSaved,
+  getIsWaiting,
+  getErrors,
+} from '../../../reducers/selectors';
+import { saveForm, initForm } from '../../../reducers/thunk';
+import './styles.css';
+import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 
 const mapStateToProps = (state) => ({
   eventForm: getEventForm(state),
@@ -29,8 +30,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateEventFormField: (fieldName, fieldValue) =>
-    dispatch(updateEventFormField(fieldName, fieldValue)),
+  updateEventFormField: (fieldName, fieldValue) => dispatch(updateEventFormField(fieldName, fieldValue)),
   onSubmit: () => dispatch(saveForm()),
   initForm: () => dispatch(initForm()),
 });
@@ -40,18 +40,16 @@ class EventForm extends Component {
     super();
 
     this.changeFirstName = (event) => {
-      this.props.updateEventFormField("firstName", event.target.value);
+      this.props.updateEventFormField('firstName', event.target.value);
     };
 
-    this.changeLastName = (event) =>
-      this.props.updateEventFormField("lastName", event.target.value);
+    this.changeLastName = (event) => this.props.updateEventFormField('lastName', event.target.value);
 
-    this.changeEmail = (event) =>
-      this.props.updateEventFormField("email", event.target.value);
+    this.changeEmail = (event) => this.props.updateEventFormField('email', event.target.value);
 
     this.changeEventDate = (newEventDate) => {
       const newDate = moment(newEventDate).utc();
-      this.props.updateEventFormField("eventDate", newDate.toISOString());
+      this.props.updateEventFormField('eventDate', newDate.toISOString());
     };
 
     this.submitForm = (firstName, lastName, email, eventDate) => (event) => {
@@ -61,6 +59,7 @@ class EventForm extends Component {
       this.props.onSubmit();
     };
   }
+
   componentWillMount() {
     this.props.initForm();
   }
@@ -100,7 +99,9 @@ class EventForm extends Component {
     );
 
     if (!eventForm) {
-      return loader(!eventForm);
+      return LoadingSpinner({ 
+        isOpen: true,
+       })
     }
 
     const errorMessages = errors || [];
@@ -161,18 +162,17 @@ class EventForm extends Component {
               </Button>
             </Grid>
             <Grid item xs={12}>
-              {
-                <div className="error">
-                  {errorMessages.map((msg) => {
-                    return (
-                      <div key={msg}>
-                        <span>Error: {msg}</span>
-                        <br />
-                      </div>
-                    );
-                  })}
-                </div>
-              }
+              <div className="error">
+                {errorMessages.map((msg) => (
+                  <div key={msg}>
+                    <span>
+                      Error:
+                      {msg}
+                    </span>
+                    <br />
+                  </div>
+                ))}
+              </div>
             </Grid>
           </Grid>
         </form>

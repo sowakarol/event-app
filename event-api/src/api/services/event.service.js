@@ -1,4 +1,4 @@
-import { Event } from "../models/event.model";
+import { Event } from '../models/event.model';
 
 class CreateEventDto {
   static toEntity(createEventDto) {
@@ -36,11 +36,11 @@ class EventDto {
 export class EventService {
   async create(createEventDto) {
     try {
-      let event = CreateEventDto.toEntity(createEventDto);
+      const event = CreateEventDto.toEntity(createEventDto);
       await event.save();
       return EventDto.fromEntity(event);
     } catch (err) {
-      console.warn("Async EventService create error", err);
+      console.warn('Async EventService create error', err);
       throw err;
     }
   }
@@ -58,18 +58,20 @@ export class EventService {
 
       return EventDto.fromEntity(updatedEntity);
     } catch (err) {
-      console.warn("Async EventService update error", err);
+      console.warn('Async EventService update error', err);
       throw err;
     }
   }
+
   async delete(id) {
     try {
       await Event.findByIdAndRemove(id);
     } catch (err) {
-      console.warn("Async EventService delete error", err);
+      console.warn('Async EventService delete error', err);
       throw err;
     }
   }
+
   async get(id) {
     try {
       const event = await Event.findById(id);
@@ -80,7 +82,7 @@ export class EventService {
 
       return EventDto.fromEntity(event);
     } catch (err) {
-      console.warn("Async EventService get error", err);
+      console.warn('Async EventService get error', err);
       throw err;
     }
   }

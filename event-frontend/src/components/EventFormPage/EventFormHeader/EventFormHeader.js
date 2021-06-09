@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { AppBar, Typography } from "@material-ui/core";
-import './styles.css'
+import React, { Component } from 'react';
+import { AppBar, Typography } from '@material-ui/core';
+import './styles.css';
 
 export class EventFormHeader extends Component {
   render() {

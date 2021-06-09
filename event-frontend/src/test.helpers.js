@@ -1,13 +1,12 @@
-import React from "react";
-import { createStore, applyMiddleware, combineReducers } from "redux";
-import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-import { render as rtlRender } from "@testing-library/react";
-import eventReducer from "./reducers/eventReducer";
-import { initialState as reducerInitialState } from "./reducers/initialState";
-
-import MomentUtils from "@date-io/moment";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import React from 'react';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { render as rtlRender } from '@testing-library/react';
+import MomentUtils from '@date-io/moment';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import eventReducer from './reducers/eventReducer';
+import { initialState as reducerInitialState } from './reducers/initialState';
 
 function render(
   ui,
@@ -16,10 +15,10 @@ function render(
     store = createStore(
       combineReducers({ eventForm: eventReducer }),
       initialState,
-      applyMiddleware(thunk)
+      applyMiddleware(thunk),
     ),
     ...renderOptions
-  } = {}
+  } = {},
 ) {
   function Wrapper({ children }) {
     return (
@@ -34,7 +33,7 @@ function render(
 }
 
 // re-export everything
-export * from "@testing-library/react";
+export * from '@testing-library/react';
 
 export { rtlRender };
 

@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
 class EventApiDataService {
   constructor() {
     // TODO move to some kind of config service
-    this.apiEndpoint = "http://localhost:5000";
+    this.apiEndpoint = 'http://localhost:5000';
   }
 
   create(payload) {

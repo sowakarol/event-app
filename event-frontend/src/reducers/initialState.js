@@ -1,12 +1,12 @@
-import moment from "moment";
+import moment from 'moment';
 
 export default {
   eventForm: {
     status: null,
     data: {
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: '',
+      lastName: '',
+      email: '',
       eventDate: moment().utc().toISOString(),
     },
     changed: false,
