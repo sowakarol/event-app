@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 
 const LoadingSpinner = ({
-  isOpen = false,
+  isOpen = true,
 }) => (
   <Backdrop open={isOpen}>
     <CircularProgress color="inherit" />

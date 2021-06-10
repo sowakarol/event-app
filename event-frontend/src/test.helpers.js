@@ -1,34 +1,26 @@
 import React from 'react';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
+import PropTypes from 'prop-types';
+
 import { render as rtlRender } from '@testing-library/react';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import eventFormReducer from './components/EventFormPage/EventForm/store/reducer';
-import reducerInitialState from './components/EventFormPage/EventForm/store/initialState';
 
-function render(
-  ui,
-  {
-    initialState = reducerInitialState,
-    store = createStore(
-      combineReducers({ eventForm: eventFormReducer }),
-      initialState,
-      applyMiddleware(thunk),
-    ),
-    ...renderOptions
-  } = {},
-) {
+function render(ui, renderOptions = {}) {
   function Wrapper({ children }) {
     return (
-      <Provider store={store}>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-          {children}
-        </MuiPickersUtilsProvider>
-      </Provider>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        {children}
+      </MuiPickersUtilsProvider>
     );
   }
+
+  Wrapper.propTypes = {
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node,
+    ]),
+  };
+
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 }
 

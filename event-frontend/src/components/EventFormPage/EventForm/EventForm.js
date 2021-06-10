@@ -1,177 +1,120 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useCallback, useState } from 'react';
+import { Formik, Form } from 'formik';
 import moment from 'moment';
-import {
-  TextField,
-  Grid,
-  Button,
-} from '@material-ui/core';
-import { DateTimePicker } from '@material-ui/pickers';
-import { updateEventFormField } from './store/actions';
-import {
-  getEventForm,
-  getHasChanged,
-  getIsSaved,
-  getIsWaiting,
-  getErrors,
-} from './store/selectors';
-import { saveForm, initForm } from './store/thunk';
+import { TextField, Button } from '@material-ui/core';
+
 import './styles.css';
+import DateTimePickerField from './DateTimePickerField';
+import createEvent from '../../../service/createEvent.service';
+import SuccessDashboard from './SuccessDashboard';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 
-const mapStateToProps = (state) => ({
-  eventForm: getEventForm(state),
-  errors: getErrors(state),
-  hasChanged: getHasChanged(state),
-  isSaved: getIsSaved(state),
-  isWaiting: getIsWaiting(state),
-});
+const EventForm = () => {
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-const mapDispatchToProps = (dispatch) => ({
-  updateEventFormField: (fieldName, fieldValue) => dispatch(updateEventFormField(fieldName, fieldValue)),
-  onSubmit: () => dispatch(saveForm()),
-  initForm: () => dispatch(initForm()),
-});
+  const onFulfillFormAgainClick = useCallback(() => {
+    setIsSuccess(false);
+  }, []);
 
-class EventForm extends Component {
-  constructor() {
-    super();
+  const submitForm = useCallback(async (values, { setFieldError, resetForm }) => {
+    setErrorMessage(null);
+    try {
+      const response = await createEvent(values);
 
-    this.changeFirstName = (event) => {
-      this.props.updateEventFormField('firstName', event.target.value);
-    };
+      console.info('Server response', response);
 
-    this.changeLastName = (event) => this.props.updateEventFormField('lastName', event.target.value);
+      if (response.status === 201) {
+        resetForm({});
+        setIsSuccess(true);
+        return;
+      }
 
-    this.changeEmail = (event) => this.props.updateEventFormField('email', event.target.value);
-
-    this.changeEventDate = (newEventDate) => {
-      const newDate = moment(newEventDate).utc();
-      this.props.updateEventFormField('eventDate', newDate.toISOString());
-    };
-
-    this.submitForm = (firstName, lastName, email, eventDate) => (event) => {
-      // do not reload page
-      event.preventDefault();
-
-      this.props.onSubmit();
-    };
-  }
-
-  componentWillMount() {
-    this.props.initForm();
-  }
-
-  render() {
-    const {
-      firstName,
-      lastName,
-      email,
-      eventDate,
-      eventForm,
-      errors,
-      isSaved,
-      isWaiting,
-    } = this.props;
-
-    if (isSaved) {
-      return (
-        <div className="center">
-          <h2>Congratulation! Event is saved</h2>
-          <br />
-          <Button
-            onClick={this.props.initForm}
-            variant="outlined"
-            color="primary"
-          >
-            Create another event
-          </Button>
-        </div>
-      );
+      throw new Error('Ooops, something went wrong!');
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const validationErrors = (error.response.data && error.response.data.errors) || [];
+        validationErrors.forEach((validationError) => {
+          if (Object.keys(values).includes(validationError.field)) {
+            setFieldError(validationError.field, validationError.message);
+          }
+        });
+      }
+      setErrorMessage(error.message);
     }
+  }, []);
 
-    if (!eventForm) {
-      return LoadingSpinner({
-        isOpen: true,
-      });
-    }
+  return (
+    <div>
+      <Formik
+        initialValues={{
+          firstName: '',
+          lastName: '',
+          email: '',
+          eventDate: moment().utc().toISOString(),
+        }}
+        onSubmit={submitForm}
+      >
+        {({
+          values, handleChange, touched, errors, isSubmitting,
+        }) => (isSuccess ? (
+          <SuccessDashboard onFulfillFormAgainClick={onFulfillFormAgainClick} />
+        ) : (
+          <Form>
+            <TextField
+              id="firstName"
+              label="First Name"
+              type="text"
+              value={values.firstName}
+              onChange={handleChange}
+              error={touched.firstName && Boolean(errors.firstName)}
+              helperText={errors.firstName && errors.firstName}
+              required
+              fullWidth
+            />
+            <TextField
+              id="lastName"
+              label="Last Name"
+              type="text"
+              value={values.lastName}
+              onChange={handleChange}
+              error={touched.lastName && Boolean(errors.lastName)}
+              helperText={errors.lastName && errors.lastName}
+              required
+              fullWidth
+            />
+            <TextField
+              id="email"
+              name="email"
+              label="Email"
+              value={values.email}
+              onChange={handleChange}
+              error={touched.email && Boolean(errors.email)}
+              helperText={touched.email && errors.email}
+              required
+              fullWidth
+            />
+            <DateTimePickerField
+              label="Event date"
+              name="eventDate"
+              required
+              fullWidth
+            />
+            <Button
+              color="primary"
+              variant="outlined"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              Create Event
+            </Button>
+            {isSubmitting && <LoadingSpinner isOpen />}
+            {errorMessage || null}
+          </Form>
+        ))}
+      </Formik>
+    </div>
+  );
+};
 
-    const errorMessages = errors || [];
-
-    return (
-      <div className="EventForm">
-        <form onSubmit={this.submitForm(firstName, lastName, email, eventDate)}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <TextField
-                type="text"
-                id="first-name"
-                label="First Name"
-                value={this.props.firstName}
-                onChange={this.changeFirstName}
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                type="text"
-                id="last-name"
-                label="Last Name"
-                value={this.props.lastName}
-                onChange={this.changeLastName}
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                type="email"
-                id="email"
-                label="Email"
-                value={this.props.email}
-                onChange={this.changeEmail}
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <DateTimePicker
-                label="Event date"
-                values={this.props.eventDate}
-                onChange={this.changeEventDate}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                disabled={isWaiting}
-                variant="outlined"
-                color="primary"
-              >
-                Save Event
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <div className="error">
-                {errorMessages.map((msg) => (
-                  <div key={msg}>
-                    <span>
-                      Error:
-                      {msg}
-                    </span>
-                    <br />
-                  </div>
-                ))}
-              </div>
-            </Grid>
-          </Grid>
-        </form>
-        {isWaiting && <LoadingSpinner isOpen />}
-      </div>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EventForm);
+export default EventForm;

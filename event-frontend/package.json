@@ -17,14 +17,13 @@
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.2.2",
     "axios": "^0.19.2",
+    "formik": "^2.2.9",
     "moment": "^2.27.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.1",
-    "react-scripts": "^4.0.3",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "react-scripts": "^4.0.3"
   },
   "browserslist": {
     "production": [
