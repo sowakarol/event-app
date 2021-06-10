@@ -1,7 +1,7 @@
-import { CREATED, OK } from 'http-status';
+import { CREATED } from 'http-status';
 import { expect } from 'chai';
-import { stub, spy, assert } from 'sinon';
-import { EventController } from '../../../../src/api/controllers/event.controller';
+import { stub, spy } from 'sinon';
+import { createEvent } from '../../../../src/api/controllers/event.controller';
 
 describe('Event Controller', () => {
   let serviceMock = {};
@@ -23,9 +23,7 @@ describe('Event Controller', () => {
 
   describe('createEvent', () => {
     it('should not fail and return 201 when request.body is ok', async () => {
-      const eventController = new EventController(serviceMock);
-
-      await eventController.createEvent(req, res, next);
+      await createEvent(req, res, next);
 
       expect(serviceMock.create.calledOnce).to.equal(true);
 
@@ -35,9 +33,8 @@ describe('Event Controller', () => {
 
     it('should call next when eventService throws', async () => {
       serviceMock.create = stub().throws();
-      const eventController = new EventController(serviceMock);
 
-      await eventController.createEvent(req, res, next);
+      await createEvent(req, res, next);
 
       expect(serviceMock.create.calledOnce).to.equal(true);
 

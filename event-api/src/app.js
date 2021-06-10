@@ -1,7 +1,7 @@
 import { connect } from 'mongoose';
 import { env, port, mongodbConnectionUrl } from './config/vars';
-import { mongoDbOptions } from './config/mongo';
-import { app } from './config/express';
+import mongoDbOptions from './config/mongo';
+import app from './config/express';
 
 connect(mongodbConnectionUrl, mongoDbOptions)
   .then(() => {

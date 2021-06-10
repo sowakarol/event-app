@@ -1,16 +1,20 @@
 import { Router } from 'express';
 import { body, param, validationResult } from 'express-validator';
 import { BAD_REQUEST } from 'http-status';
-import { EventController } from '../../controllers/event.controller';
-import { EventService } from '../../services/event.service';
-import { ApiError } from '../../middlewares/apiError';
+import {
+  createEvent, removeEvent, getAllEvents, getEvent, updateEvent,
+} from '../../controllers/event.controller';
+import ValidationError from '../../middlewares/apiError';
 
 const router = Router();
-router.eventController = new EventController(new EventService());
 
 const errorFormatter = ({
-  location, msg, param, value, nestedErrors,
-}) => `${location}[${param}]: ${msg}`;
+  msg, param: field, value,
+}) => ({
+  field,
+  message: msg,
+  invalidValue: value,
+});
 
 const createEventValidator = [
   body('email').isEmail(),
@@ -35,44 +39,44 @@ const createEventValidator = [
 const idParamNoEmptyValidator = [param('id').not().isEmpty()];
 
 router.post('/', createEventValidator, (req, res, next) => {
-  const errors = validationResult(req).formatWith(errorFormatter);
-  if (!errors.isEmpty()) {
-    console.warn('POST / validation errors', errors);
-    return next(new ApiError(errors.array().toString(), BAD_REQUEST));
+  const result = validationResult(req).formatWith(errorFormatter);
+  if (!result.isEmpty()) {
+    console.warn('POST / validation errors aaa', result);
+    return next(new ValidationError('Validation error', result.array(), BAD_REQUEST));
   }
-  router.eventController.createEvent(req, res, next);
+  return createEvent(req, res, next);
 });
 
-router.get('/', (req, res, next) => router.eventController.getAllEvents(req, res, next));
+router.get('/', (req, res, next) => getAllEvents(req, res, next));
 
 router.get('/:id', idParamNoEmptyValidator, (req, res, next) => {
-  const errors = validationResult(req).formatWith(errorFormatter);
-  if (!errors.isEmpty()) {
-    console.warn('GET /:id validation errors', errors);
-    return next(new ApiError(errors.array().toString(), BAD_REQUEST));
+  const result = validationResult(req).formatWith(errorFormatter);
+  if (!result.isEmpty()) {
+    console.warn('GET /:id validation errors', result);
+    return next(new ValidationError(result.array(), BAD_REQUEST));
   }
-  router.eventController.getEvent(req, res, next);
+  return getEvent(req, res, next);
 });
 
 router.delete('/:id', idParamNoEmptyValidator, (req, res, next) => {
-  const errors = validationResult(req).formatWith(errorFormatter);
-  if (!errors.isEmpty()) {
-    console.warn('DELETE /:id validation errors', errors);
-    return next(new ApiError(errors.array().toString(), BAD_REQUEST));
+  const result = validationResult(req).formatWith(errorFormatter);
+  if (!result.isEmpty()) {
+    console.warn('DELETE /:id validation errors', result);
+    return next(new ValidationError('Validation error', result.array(), BAD_REQUEST));
   }
-  router.eventController.deleteEvent(req, res, next);
+  return removeEvent(req, res, next);
 });
 
 router.put(
   '/:id',
   createEventValidator.concat(idParamNoEmptyValidator),
   (req, res, next) => {
-    const errors = validationResult(req).formatWith(errorFormatter);
-    if (!errors.isEmpty()) {
-      console.warn('PUT /:id validation errors', errors);
-      return next(new ApiError(errors.array().toString(), BAD_REQUEST));
+    const result = validationResult(req).formatWith(errorFormatter);
+    if (!result.isEmpty()) {
+      console.warn('PUT /:id validation errors', result);
+      return next(new ValidationError('Validation error', result.array(), BAD_REQUEST));
     }
-    router.eventController.updateEvent(req, res, next);
+    return updateEvent(req, res, next);
   },
 );
 

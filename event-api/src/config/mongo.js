@@ -1,4 +1,6 @@
-export const mongoDbOptions = {
+const mongoDbOptions = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 };
+
+export default mongoDbOptions;

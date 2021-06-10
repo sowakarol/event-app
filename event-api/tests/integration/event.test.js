@@ -1,10 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 import request from 'supertest';
 import {
   CREATED, OK, BAD_REQUEST, NOT_FOUND,
 } from 'http-status';
 import { expect } from 'chai';
 import app from '../../src/app';
-import { Event } from '../../src/api/models/event.model';
+import Event from '../../src/api/models/event.model';
 
 describe('Event API', () => {
   const NEW_ENTITY = {
@@ -99,12 +100,15 @@ describe('Event API', () => {
       // populate db with SIZE number of events
       const SIZE = 3;
 
-      for (let i = 0; i < SIZE; i++) {
+      const events = [];
+      for (let i = 0; i < SIZE; i += 1) {
         const eventTemplate = { ...NEW_ENTITY };
         delete eventTemplate._id;
 
-        await new Event(eventTemplate).save();
+        events.push(eventTemplate);
       }
+
+      await Promise.all(events.map((event) => new Event(event).save()));
 
       const res = await request(app).get('/api/v1/events/').expect(OK);
       expect(res.body).to.be.a('array');
@@ -121,7 +125,6 @@ describe('Event API', () => {
   describe('GET /api/v1/events/:id', () => {
     it('should correctly retrieve event from DB', async () => {
       const entity = { ...NEW_ENTITY };
-      console.error('entity', entity);
       const event = new Event({ ...NEW_ENTITY });
       await event.save();
 

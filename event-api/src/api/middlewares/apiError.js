@@ -1,7 +1,10 @@
-export class ApiError extends Error {
-  constructor(message, statusCode) {
+class ValidationError extends Error {
+  constructor(message, errors, statusCode) {
     super(message);
 
+    this.errors = errors;
     this.statusCode = statusCode;
   }
 }
+
+export default ValidationError;

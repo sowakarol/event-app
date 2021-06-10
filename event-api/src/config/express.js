@@ -5,7 +5,7 @@ import cors from 'cors';
 import routesV1 from '../api/routes/v1/index';
 import errorHandler from '../api/middlewares/error.middleware';
 
-export const app = express();
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,3 +19,5 @@ app.use(routesV1);
 
 // error handling
 app.use(errorHandler);
+
+export default app;
