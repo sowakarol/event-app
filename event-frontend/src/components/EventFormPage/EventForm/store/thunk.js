@@ -1,11 +1,11 @@
 import { getEventForm } from './selectors';
-import eventService from '../service/event.service';
+import eventService from '../../../../service/event.service';
 import {
   createEventSuccess,
   createEventFailed,
   createEvent,
   initEventForm,
-} from '../actions/eventActions';
+} from './actions';
 
 export const initForm = () => (dispatch, getState) => {
   const form = getEventForm(getState());

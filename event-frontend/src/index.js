@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import './index.css';
 import App from './App';
-import eventFormReducer from './reducers/eventFormReducer';
-import initialState from './reducers/initialState';
+import eventFormReducer from './components/EventFormPage/EventForm/store/reducer';
+import initialState from './components/EventFormPage/EventForm/store/initialState';
 
 const store = createStore(
   combineReducers({ eventForm: eventFormReducer }),

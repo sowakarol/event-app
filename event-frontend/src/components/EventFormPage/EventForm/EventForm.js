@@ -7,15 +7,15 @@ import {
   Button,
 } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
-import { updateEventFormField } from '../../../actions/eventActions';
+import { updateEventFormField } from './store/actions';
 import {
   getEventForm,
   getHasChanged,
   getIsSaved,
   getIsWaiting,
   getErrors,
-} from '../../../reducers/selectors';
-import { saveForm, initForm } from '../../../reducers/thunk';
+} from './store/selectors';
+import { saveForm, initForm } from './store/thunk';
 import './styles.css';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 

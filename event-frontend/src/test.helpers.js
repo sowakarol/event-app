@@ -5,8 +5,8 @@ import thunk from 'redux-thunk';
 import { render as rtlRender } from '@testing-library/react';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import eventFormReducer from './reducers/eventFormReducer';
-import reducerInitialState from './reducers/initialState';
+import eventFormReducer from './components/EventFormPage/EventForm/store/reducer';
+import reducerInitialState from './components/EventFormPage/EventForm/store/initialState';
 
 function render(
   ui,
