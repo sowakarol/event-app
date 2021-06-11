@@ -14,6 +14,7 @@ describe('Event Service', () => {
       const events = await getAll();
       expect(Event.find.called).to.equal(true);
       expect(events[0]).to.have.property('id');
+      expect(events[0].id).to.equal('ID');
     });
   });
 });

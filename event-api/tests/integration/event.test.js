@@ -7,6 +7,10 @@ import { expect } from 'chai';
 import app from '../../src/app';
 import Event from '../../src/api/models/event.model';
 
+const cleanUpDatabase = async () => {
+  await Event.deleteMany({});
+};
+
 describe('Event API', () => {
   const NEW_ENTITY = {
     _id: '5f3957a73f62a60012ae2359',
@@ -15,9 +19,9 @@ describe('Event API', () => {
     email: 'test@domain.com',
     eventDate: new Date(1995, 11, 17, 3, 24, 0).toJSON(),
   };
-  // clean whole DB before each test
+
   beforeEach(async () => {
-    await Event.deleteMany({});
+    await cleanUpDatabase();
   });
 
   describe('GET api/_healtcheck', () => {
@@ -27,9 +31,9 @@ describe('Event API', () => {
   });
 
   describe('POST /api/v1/events/', () => {
-    it('should create a new event when request is ok', (done) => {
+    it('should create a new event when request is ok', async () => {
       const date = new Date(1995, 11, 17, 3, 24, 0).toJSON();
-      request(app)
+      const res = await request(app)
         .post('/api/v1/events/')
         .send({
           firstName: 'test',
@@ -37,16 +41,14 @@ describe('Event API', () => {
           email: 'test@test.pl',
           eventDate: date,
         })
-        .expect(CREATED)
-        .then((res) => {
-          expect(res.status).to.equal(CREATED);
-          expect(res.body).to.have.property('id');
-          expect(res.body).to.have.property('firstName', 'test');
-          expect(res.body).to.have.property('lastName', 'test');
-          expect(res.body).to.have.property('email', 'test@test.pl');
-          expect(res.body).to.have.property('eventDate', date);
-          done();
-        });
+        .expect(CREATED);
+
+      expect(res.status).to.equal(CREATED);
+      expect(res.body).to.have.property('id');
+      expect(res.body).to.have.property('firstName', 'test');
+      expect(res.body).to.have.property('lastName', 'test');
+      expect(res.body).to.have.property('email', 'test@test.pl');
+      expect(res.body).to.have.property('eventDate', date);
     });
 
     describe('should respond 400 when', () => {

@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import cors from 'cors';
 import routesV1 from '../api/routes/v1/index';
-import errorHandler from '../api/middlewares/error.middleware';
+import errorHandler from '../api/middlewares/errorHandler';
 
 const app = express();
 

@@ -1,9 +1,9 @@
 import { INTERNAL_SERVER_ERROR } from 'http-status';
-import ValidationError from './apiError';
+import StatusCodeError from '../errors/StatusCodeError';
 
 // eslint-disable-next-line no-unused-vars
 export default (error, req, res, next) => {
-  if (error instanceof ValidationError) {
+  if (error instanceof StatusCodeError) {
     return res.status(error.statusCode).json({
       errors: error.errors,
       message: error.message,

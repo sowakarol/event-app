@@ -1,3 +1,4 @@
+import EntityNotFoundError from '../errors/EntityNotFoundError';
 import Event from '../models/event.model';
 import CreateEventDto from './CreateEventDto';
 import EventDto from './EventDto';
@@ -45,7 +46,7 @@ export const get = async (id) => {
     const event = await Event.findById(id);
 
     if (!event) {
-      return null;
+      throw new EntityNotFoundError('Event', id);
     }
 
     return EventDto.fromEntity(event);

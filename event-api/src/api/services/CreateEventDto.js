@@ -1,3 +1,5 @@
+import Event from '../models/event.model';
+
 class CreateEventDto {
   static toEntity({
     firstName,
