@@ -1,0 +1,17 @@
+.center {
+  text-align: center;
+}
+
+.FormField {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.SubmitButton {
+  padding-top: 10px;
+}
+
+.EventFormHeader {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

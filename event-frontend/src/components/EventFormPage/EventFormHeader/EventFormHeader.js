@@ -1,12 +1,14 @@
 import React from 'react';
 
 import { AppBar, Typography } from '@material-ui/core';
-import './styles.css';
+import '../styles.css';
 
 const EventFormHeader = () => (
-  <div className="EventFormHeader">
+  <div className="center">
     <AppBar position="static">
-      <Typography variant="h4">Create Event</Typography>
+      <div className="EventFormHeader">
+        <Typography variant="h4">Create Event</Typography>
+      </div>
     </AppBar>
   </div>
 );

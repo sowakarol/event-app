@@ -9,11 +9,11 @@ const EventFormPage = () => (
   <>
     <EventFormHeader />
     <Grid container>
-      <Grid item xs={5} />
-      <Grid item xs={2}>
+      <Grid item xs={3} />
+      <Grid item xs={6}>
         <EventForm />
       </Grid>
-      <Grid item xs={5} />
+      <Grid item xs={3} />
     </Grid>
   </>
 );

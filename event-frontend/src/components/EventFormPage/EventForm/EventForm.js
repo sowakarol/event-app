@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import moment from 'moment';
 import { TextField, Button } from '@material-ui/core';
 
-import './styles.css';
+import '../styles.css';
 import EventFormSchema from './EventForm.schema';
 import DateTimePickerField from './DateTimePickerField';
 import createEvent from '../../../service/createEvent.service';
@@ -60,55 +60,69 @@ const EventForm = () => {
         }) => (isSuccess ? (
           <SuccessDashboard onFulfillFormAgainClick={onFulfillFormAgainClick} />
         ) : (
-          <Form>
-            <TextField
-              id="firstName"
-              label="First Name"
-              type="text"
-              value={values.firstName}
-              onChange={handleChange}
-              error={touched.firstName && Boolean(errors.firstName)}
-              helperText={errors.firstName && errors.firstName}
-              required
-              fullWidth
-            />
-            <TextField
-              id="lastName"
-              label="Last Name"
-              type="text"
-              value={values.lastName}
-              onChange={handleChange}
-              error={touched.lastName && Boolean(errors.lastName)}
-              helperText={errors.lastName && errors.lastName}
-              required
-              fullWidth
-            />
-            <TextField
-              id="email"
-              name="email"
-              label="Email"
-              value={values.email}
-              onChange={handleChange}
-              error={touched.email && Boolean(errors.email)}
-              helperText={touched.email && errors.email}
-              required
-              fullWidth
-            />
-            <DateTimePickerField
-              id="eventDate"
-              label="Event date"
-              name="eventDate"
-              required
-              fullWidth
-            />
-            <Button
-              color="primary"
-              variant="outlined"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              Create Event
-            </Button>
+          <Form className="center">
+            <div className="FormField">
+              <TextField
+                id="firstName"
+                label="First Name"
+                type="text"
+                className="FormField"
+                value={values.firstName}
+                onChange={handleChange}
+                error={touched.firstName && Boolean(errors.firstName)}
+                helperText={errors.firstName && errors.firstName}
+                required
+                fullWidth
+              />
+            </div>
+
+            <div className="FormField">
+              <TextField
+                id="lastName"
+                label="Last Name"
+                type="text"
+                className="FormField"
+                value={values.lastName}
+                onChange={handleChange}
+                error={touched.lastName && Boolean(errors.lastName)}
+                helperText={errors.lastName && errors.lastName}
+                required
+                fullWidth
+              />
+            </div>
+            <div className="FormField">
+              <TextField
+                id="email"
+                name="email"
+                label="Email"
+                className="FormField"
+                value={values.email}
+                onChange={handleChange}
+                error={touched.email && Boolean(errors.email)}
+                helperText={touched.email && errors.email}
+                required
+                fullWidth
+              />
+            </div>
+            <div className="FormField">
+              <DateTimePickerField
+                id="eventDate"
+                label="Event date"
+                name="eventDate"
+                required
+                fullWidth
+              />
+            </div>
+            <div className="SubmitButton">
+              <Button
+                color="primary"
+                variant="outlined"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                Create Event
+              </Button>
+            </div>
             {isSubmitting && <LoadingSpinner isOpen />}
             {errorMessage || null}
           </Form>
