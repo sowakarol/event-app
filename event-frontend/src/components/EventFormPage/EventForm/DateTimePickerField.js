@@ -22,7 +22,7 @@ const DateTimePickerField = ({
       error={meta.touched && Boolean(meta.error)}
       onChange={(newValue) => helpers.setValue(newValue)}
       required={required}
-      format="YYYY-MM-DDTHH:mm:ss.SSSZ"
+      format="dddd, MMMM Do YYYY, h:mm:ss a"
       fullWidth={fullWidth}
     />
   );

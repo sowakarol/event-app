@@ -29,11 +29,11 @@ test('should be rendered', async () => {
 test('should have correct initial value', async () => {
   const field = 'date';
   const label = 'Date';
-  const initialValue = moment().toISOString();
+  const initialValue = moment();
   const { container } = render(
     <Formik
       initialValues={{
-        [field]: initialValue,
+        [field]: initialValue.toISOString(),
       }}
     >
       <DateTimePickerField
@@ -47,5 +47,5 @@ test('should have correct initial value', async () => {
 
   const input = queryByAttribute('id', container, field);
 
-  expect(moment(input.value).toISOString()).toBe(moment(initialValue).toISOString());
+  expect(input.value).toBe(initialValue.format('dddd, MMMM Do YYYY, h:mm:ss a'));
 });

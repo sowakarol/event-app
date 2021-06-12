@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 
 import EventForm from '../EventForm';
 import {
@@ -47,7 +46,6 @@ test('submits correct values', async () => {
   const firstName = queryByAttribute('id', container, 'firstName');
   const lastName = queryByAttribute('id', container, 'lastName');
   const email = queryByAttribute('id', container, 'email');
-  const eventDate = queryByAttribute('id', container, 'eventDate');
   const submit = queryByAttribute('type', container, 'submit');
 
   await waitFor(() => {
@@ -78,10 +76,12 @@ test('submits correct values', async () => {
     fireEvent.click(submit);
   });
 
-  expect(createEventService).toHaveBeenCalledWith({
-    firstName: 'mockFirstName',
-    lastName: 'mockLastName',
-    email: 'mock@email.com',
-    eventDate: moment(eventDate.value).toISOString(),
-  });
+  expect(createEventService).toHaveBeenCalledWith(
+    expect.objectContaining({
+      firstName: 'mockFirstName',
+      lastName: 'mockLastName',
+      email: 'mock@email.com',
+      eventDate: expect.any(String),
+    }),
+  );
 });
