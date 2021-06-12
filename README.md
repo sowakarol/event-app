@@ -75,7 +75,9 @@ I have assumed that some users would want to add an event that has already happe
 - Node.js
 - Express (with Express validator)
 - Docker (+ Docker Compose)
-- React (+ Redux)
+- React
+- Formik
+- Yup
 - Material UI
 - MongoDB
 - Web-based MongoDB admin interface (mongo-express)
