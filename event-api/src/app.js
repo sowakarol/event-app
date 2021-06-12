@@ -2,16 +2,17 @@ import { connect } from 'mongoose';
 import { env, port, mongodbConnectionUrl } from './config/vars';
 import mongoDbOptions from './config/mongo';
 import app from './config/express';
+import logger from './api/services/logger';
 
 connect(mongodbConnectionUrl, mongoDbOptions)
   .then(() => {
-    console.info('Connected to MongoDB', mongodbConnectionUrl);
+    logger.info('Connected to MongoDB', mongodbConnectionUrl);
   })
   .catch((err) => {
-    console.error('Error when connecting to MongoDB', err);
+    logger.error('Error when connecting to MongoDB', err);
     process.exit(1);
   });
 
-app.listen(port, () => console.info(`Event API started on port ${port} (${env})`));
+app.listen(port, () => logger.info(`Event API started on port ${port} (${env})`));
 
 export default app;

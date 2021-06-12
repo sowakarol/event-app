@@ -2,6 +2,7 @@ import EntityNotFoundError from '../errors/EntityNotFoundError';
 import Event from '../models/event.model';
 import CreateEventDto from './CreateEventDto';
 import EventDto from './EventDto';
+import logger from './logger';
 
 export const create = async (createEventDto) => {
   try {
@@ -9,7 +10,7 @@ export const create = async (createEventDto) => {
     await event.save();
     return EventDto.fromEntity(event);
   } catch (err) {
-    console.warn('Async EventService create error', err);
+    logger.warn('Async EventService create error', err);
     throw err;
   }
 };
@@ -27,7 +28,7 @@ export const update = async (id, eventDto) => {
 
     return EventDto.fromEntity(updatedEntity);
   } catch (err) {
-    console.warn('Async EventService update error', err);
+    logger.warn('Async EventService update error', err);
     throw err;
   }
 };
@@ -36,7 +37,7 @@ export const remove = async (id) => {
   try {
     await Event.findByIdAndRemove(id);
   } catch (err) {
-    console.warn('Async EventService remove error', err);
+    logger.warn('Async EventService remove error', err);
     throw err;
   }
 };
@@ -51,7 +52,7 @@ export const get = async (id) => {
 
     return EventDto.fromEntity(event);
   } catch (err) {
-    console.warn('Async EventService get error', err);
+    logger.warn('Async EventService get error', err);
     throw err;
   }
 };
