@@ -4,6 +4,7 @@ import moment from 'moment';
 import { TextField, Button } from '@material-ui/core';
 
 import './styles.css';
+import EventFormSchema from './EventForm.schema';
 import DateTimePickerField from './DateTimePickerField';
 import createEvent from '../../../service/createEvent.service';
 import SuccessDashboard from './SuccessDashboard';
@@ -21,8 +22,6 @@ const EventForm = () => {
     setErrorMessage(null);
     try {
       const response = await createEvent(values);
-
-      console.info('Server response', response);
 
       if (response.status === 201) {
         resetForm({});
@@ -53,6 +52,7 @@ const EventForm = () => {
           email: '',
           eventDate: moment().utc().toISOString(),
         }}
+        validationSchema={EventFormSchema}
         onSubmit={submitForm}
       >
         {({
@@ -95,6 +95,7 @@ const EventForm = () => {
               fullWidth
             />
             <DateTimePickerField
+              id="eventDate"
               label="Event date"
               name="eventDate"
               required

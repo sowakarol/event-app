@@ -5,14 +5,16 @@ import { useField } from 'formik';
 
 const DateTimePickerField = ({
   label,
+  id,
+  name,
   required = false,
   fullWidth = false,
-  ...props
 }) => {
-  const [field, meta, helpers] = useField(props);
+  const [field, meta, helpers] = useField(name);
 
   return (
     <DateTimePicker
+      id={id}
       label={label}
       name={field.name}
       value={field.value}
@@ -20,6 +22,7 @@ const DateTimePickerField = ({
       error={meta.touched && Boolean(meta.error)}
       onChange={(newValue) => helpers.setValue(newValue)}
       required={required}
+      format="YYYY-MM-DDTHH:mm:ss.SSSZ"
       fullWidth={fullWidth}
     />
   );
@@ -27,6 +30,7 @@ const DateTimePickerField = ({
 
 DateTimePickerField.propTypes = {
   label: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   required: PropTypes.bool,
   fullWidth: PropTypes.bool,
