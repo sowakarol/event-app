@@ -5,7 +5,7 @@ import {
 } from 'http-status';
 import { expect } from 'chai';
 import app from '../../src/app';
-import Event from '../../src/api/models/event.model';
+import Event from '../../src/models/event.model';
 
 const cleanUpDatabase = async () => {
   await Event.deleteMany({});

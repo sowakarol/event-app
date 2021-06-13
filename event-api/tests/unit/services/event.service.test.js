@@ -1,7 +1,7 @@
 import { stub } from 'sinon';
 import { expect } from 'chai';
-import Event from '../../../../src/api/models/event.model';
-import { getAll } from '../../../../src/api/services/event.service';
+import Event from '../../../src/models/event.model';
+import { getAll } from '../../../src/services/event.service';
 
 describe('Event Service', () => {
   // mocked Event model

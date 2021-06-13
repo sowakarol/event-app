@@ -4,10 +4,10 @@ import { OK, CREATED } from 'http-status';
 
 import {
   remove, get, getAll, update, create,
-} from '../../services/event.service';
-import { isValidId } from '../../models/event.model';
-import ValidationError from '../../errors/ValidationError';
-import logger from '../../services/logger';
+} from '../../../services/event.service';
+import { isValidId } from '../../../models/event.model';
+import ValidationError from '../../../errors/ValidationError';
+import logger from '../../../services/logger';
 
 const router = Router();
 

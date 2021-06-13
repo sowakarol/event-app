@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { stub, spy } from 'sinon';
 import { createEvent } from '../../../../../src/api/routes/v1/event.route';
 
-import * as eventService from '../../../../../src/api/services/event.service';
+import * as eventService from '../../../../../src/services/event.service';
 
 describe('Event Controller', () => {
   let res = {};
