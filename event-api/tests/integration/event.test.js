@@ -53,7 +53,7 @@ describe('Event API', () => {
 
     describe('should respond 400 when', () => {
       it('request does not have eventDate field', async () => {
-        await request(app)
+        const res = await request(app)
           .post('/api/v1/events/')
           .send({
             firstName: 'test',
@@ -61,10 +61,18 @@ describe('Event API', () => {
             email: 'test@test.pl',
           })
           .expect(BAD_REQUEST);
+
+        expect(res.body).to.have.property('message', 'Validation Error');
+        expect(res.body).to.have.property('errors');
+        expect(res.body.errors.length).to.equal(1);
+
+        const validationError = res.body.errors[0];
+        expect(validationError).to.have.property('field', 'eventDate');
+        expect(validationError).to.have.property('message', '"eventDate" is required');
       });
 
       it('request does not have firstName field', async () => {
-        await request(app)
+        const res = await request(app)
           .post('/api/v1/events/')
           .send({
             lastName: 'test',
@@ -72,6 +80,14 @@ describe('Event API', () => {
             eventDate: new Date(1995, 11, 17, 3, 24, 0).toJSON(),
           })
           .expect(BAD_REQUEST);
+
+        expect(res.body).to.have.property('message', 'Validation Error');
+        expect(res.body).to.have.property('errors');
+        expect(res.body.errors.length).to.equal(1);
+
+        const validationError = res.body.errors[0];
+        expect(validationError).to.have.property('field', 'firstName');
+        expect(validationError).to.have.property('message', '"firstName" is required');
       });
     });
   });
@@ -130,8 +146,8 @@ describe('Event API', () => {
       const event = new Event({ ...NEW_ENTITY });
       await event.save();
 
-      const res = await request(app).get(`/api/v1/events/${entity._id}`);
-      expect(res.status).to.equal(OK);
+      const res = await request(app).get(`/api/v1/events/${entity._id}`).expect(OK);
+
       expect(res.body).to.have.property('id', NEW_ENTITY._id);
       expect(res.body).to.have.property('firstName');
       expect(res.body).to.have.property('lastName');
@@ -140,16 +156,22 @@ describe('Event API', () => {
     });
 
     it('should return 404 when event does not exist in DB', async () => {
-      const res = await request(app).get(
-        '/api/v1/events/5f3957a73f62a60012ae0000',
-      );
-      expect(res.status).to.equal(NOT_FOUND);
+      const res = await request(app).get('/api/v1/events/5f3957a73f62a60012ae0000').expect(NOT_FOUND);
+
+      expect(res.body).to.have.property('message', 'Event with id 5f3957a73f62a60012ae0000 not found');
     });
 
     it('should return 400 when id cannot be casted', async () => {
-      const res = await request(app).get('/api/v1/events/not-existing-test-id');
+      const res = await request(app).get('/api/v1/events/not-existing-test-id').expect(BAD_REQUEST);
 
-      expect(res.status).to.equal(BAD_REQUEST);
+      expect(res.body).to.have.property('message', 'Validation Error');
+      expect(res.body).to.have.property('errors');
+      expect(res.body.errors.length).to.equal(1);
+
+      const validationError = res.body.errors[0];
+      expect(validationError).to.have.property('field', 'id');
+      expect(validationError).to.have.property('message', 'Invalid "id" parameter');
+      expect(validationError).to.have.property('invalidValue', 'not-existing-test-id');
     });
   });
   describe('DELETE /api/v1/events/:id', () => {
@@ -162,7 +184,7 @@ describe('Event API', () => {
         .expect(OK);
 
       const response = await Event.findById(NEW_ENTITY._id);
-      expect(response).to.be.a('null');
+      expect(response).to.equal(null);
     });
   });
 
@@ -182,7 +204,7 @@ describe('Event API', () => {
           eventDate: date,
         })
         .expect(OK);
-        // check if entity was updated in DB + response body
+
       const entityInDB = await Event.findById(NEW_ENTITY._id);
       expect(entityInDB).to.have.property('firstName', 'test-updated');
       expect(entityInDB).to.have.property('lastName', 'test-updated');
