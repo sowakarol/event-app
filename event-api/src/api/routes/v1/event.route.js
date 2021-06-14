@@ -1,57 +1,14 @@
 import { Router } from 'express';
-import { body, param, validationResult } from 'express-validator';
 import { OK, CREATED } from 'http-status';
 
+import EventValidator from '../../../validators/event.validator';
+import IdValidator from '../../../validators/id.validator';
 import {
   remove, get, getAll, update, create,
 } from '../../../services/event.service';
-import { isValidId } from '../../../models/event.model';
-import ValidationError from '../../../errors/ValidationError';
 import logger from '../../../services/logger';
 
 const router = Router();
-
-const errorFormatter = ({
-  msg, param: field, value,
-}) => ({
-  field,
-  message: msg,
-  invalidValue: value,
-});
-
-const createEventValidator = [
-  body('email').isEmail(),
-  body('firstName').not().isEmpty(),
-  body('lastName').not().isEmpty(),
-  body('eventDate').custom((value) => {
-    if (value) {
-      const dateParsed = new Date(Date.parse(value));
-      if (
-        dateParsed.toISOString() === value
-        && dateParsed.toUTCString() === new Date(value).toUTCString()
-      ) {
-        return value;
-      }
-      throw new Error('eventDate value not in ISO8601');
-    } else {
-      throw new Error('eventDate required');
-    }
-  }),
-];
-
-const idParamValidator = [
-  param('id').not().isEmpty(),
-  param('id').custom((value) => isValidId(value)),
-];
-
-const validate = (req, _, next) => {
-  const result = validationResult(req).formatWith(errorFormatter);
-  if (!result.isEmpty()) {
-    logger.warn('POST / validation errors', result);
-    return next(new ValidationError('Validation error', result.array()));
-  }
-  return next();
-};
 
 export const createEvent = async (req, res, next) => {
   logger.info('Async createEvent request', req.body);
@@ -111,10 +68,10 @@ const updateEvent = async (req, res, next) => {
 };
 
 router.get('/', getAllEvents);
-router.post('/', createEventValidator, validate, createEvent);
+router.post('/', EventValidator, createEvent);
 
-router.get('/:id', idParamValidator, validate, getEvent);
-router.put('/:id', createEventValidator.concat(idParamValidator), validate, updateEvent);
-router.delete('/:id', idParamValidator, validate, removeEvent);
+router.get('/:id', IdValidator, getEvent);
+router.put('/:id', EventValidator, IdValidator, updateEvent);
+router.delete('/:id', IdValidator, removeEvent);
 
 export default router;

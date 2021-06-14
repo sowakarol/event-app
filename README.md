@@ -61,8 +61,8 @@ npm run test:{integration|unit}
 
 Validation of Event resource takes place:
 
-1. In the frontend application
-2. In the backend application (`express-validator`)
+1. In the frontend application (`Yup`)
+2. In the backend application (`Joi`)
 3. In MongoDB schema
 
 ### Validation of eventDate field
@@ -73,17 +73,17 @@ I have assumed that some users would want to add an event that has already happe
 ## Technologies
 
 - Node.js
-- Express (with Express validator)
+- Express
 - Docker (+ Docker Compose)
 - React
 - Formik
 - Yup
+- Joi
 - Material UI
 - MongoDB
 - Web-based MongoDB admin interface (mongo-express)
 
 ## Future Works
 
-- more frontend tests
 - add swagger
 - JWT authentication
