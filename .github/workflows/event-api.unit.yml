@@ -22,7 +22,9 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd event-api
     - run: npm ci
+      working-directory: ./event-api
     - run: npm run build --if-present
+      working-directory: ./event-api
     - run: npm run test:unit
+      working-directory: ./event-api
