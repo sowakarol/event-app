@@ -3,7 +3,7 @@
 The event application consists of:
 
 - Event API - (Node.js + Express)
-- Event frontend application - a simple form for adding an event (React + Redux)
+- Event frontend application - a simple form for adding an event (React)
 - Event database (MongoDB)
 
 ## Event API Reference
