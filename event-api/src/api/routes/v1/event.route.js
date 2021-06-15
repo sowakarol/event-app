@@ -21,7 +21,7 @@ export const createEvent = async (req, res, next) => {
   }
 };
 
-const getEvent = async (req, res, next) => {
+export const getEvent = async (req, res, next) => {
   try {
     const { id } = req.params;
     logger.info('Async getEvent request', id);
@@ -33,7 +33,7 @@ const getEvent = async (req, res, next) => {
   }
 };
 
-const getAllEvents = async (_, res, next) => {
+export const getAllEvents = async (_, res, next) => {
   try {
     const events = await getAll();
     res.json(events);
