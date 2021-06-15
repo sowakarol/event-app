@@ -1,82 +1,77 @@
-import { Router } from "express";
-import { EventController } from "../../controllers/event.controller";
-import { EventService } from "../../services/event.service";
-import { body, param, validationResult } from "express-validator";
-import { BAD_REQUEST } from "http-status";
-import { ApiError } from "../../middlewares/apiError";
+import { Router } from 'express';
+import { OK, CREATED } from 'http-status';
+
+import EventValidator from '../../../validators/event.validator';
+import IdValidator from '../../../validators/id.validator';
+import {
+  remove, get, getAll, update, create,
+} from '../../../services/event.service';
+import logger from '../../../services/logger';
 
 const router = Router();
-router.eventController = new EventController(new EventService());
 
-const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
-  return `${location}[${param}]: ${msg}`;
+export const createEvent = async (req, res, next) => {
+  logger.info('Async createEvent request', req.body);
+  try {
+    const savedEvent = await create(req.body);
+    res.status(CREATED).json(savedEvent);
+  } catch (err) {
+    logger.error('Async createEvent error', err);
+    next(err);
+  }
 };
 
-const createEventValidator = [
-  body("email").isEmail(),
-  body("firstName").not().isEmpty(),
-  body("lastName").not().isEmpty(),
-  body("eventDate").custom((value) => {
-    if (value) {
-      const dateParsed = new Date(Date.parse(value));
-      if (
-        dateParsed.toISOString() === value &&
-        dateParsed.toUTCString() === new Date(value).toUTCString()
-      ) {
-        return value;
-      } else {
-        throw new Error("eventDate value not in ISO8601");
-      }
-    } else {
-      throw new Error("eventDate required");
-    }
-  }),
-];
-
-const idParamNoEmptyValidator = [param("id").not().isEmpty()];
-
-router.post("/", createEventValidator, (req, res, next) => {
-  const errors = validationResult(req).formatWith(errorFormatter);
-  if (!errors.isEmpty()) {
-    console.warn("POST / validation errors", errors);
-    return next(new ApiError(errors.array().toString(), BAD_REQUEST));
+const getEvent = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    logger.info('Async getEvent request', id);
+    const event = await get(id);
+    res.json(event);
+  } catch (err) {
+    logger.error('Async getEvent error', err);
+    next(err);
   }
-  router.eventController.createEvent(req, res, next);
-});
+};
 
-router.get("/", (req, res, next) =>
-  router.eventController.getAllEvents(req, res, next)
-);
-
-router.get("/:id", idParamNoEmptyValidator, (req, res, next) => {
-  const errors = validationResult(req).formatWith(errorFormatter);
-  if (!errors.isEmpty()) {
-    console.warn("GET /:id validation errors", errors);
-    return next(new ApiError(errors.array().toString(), BAD_REQUEST));
+const getAllEvents = async (_, res, next) => {
+  try {
+    const events = await getAll();
+    res.json(events);
+  } catch (err) {
+    logger.error('Async getAllEvents error', err);
+    next(err);
   }
-  router.eventController.getEvent(req, res, next);
-});
+};
 
-router.delete("/:id", idParamNoEmptyValidator, (req, res, next) => {
-  const errors = validationResult(req).formatWith(errorFormatter);
-  if (!errors.isEmpty()) {
-    console.warn("DELETE /:id validation errors", errors);
-    return next(new ApiError(errors.array().toString(), BAD_REQUEST));
+const removeEvent = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    logger.info('Async removeEvent request', id);
+    await remove(id);
+    res.sendStatus(OK);
+  } catch (err) {
+    logger.error('Async removeEvent error', err);
+    next(err);
   }
-  router.eventController.deleteEvent(req, res, next);
-});
+};
 
-router.put(
-  "/:id",
-  createEventValidator.concat(idParamNoEmptyValidator),
-  (req, res, next) => {
-    const errors = validationResult(req).formatWith(errorFormatter);
-    if (!errors.isEmpty()) {
-      console.warn("PUT /:id validation errors", errors);
-      return next(new ApiError(errors.array().toString(), BAD_REQUEST));
-    }
-    router.eventController.updateEvent(req, res, next);
+const updateEvent = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    logger.info('Async updateEvent request', id);
+    const updatedEvent = await update(id, req.body);
+    res.json(updatedEvent);
+  } catch (err) {
+    logger.error('Async updateEvent error', err);
+    next(err);
   }
-);
+};
+
+router.get('/', getAllEvents);
+router.post('/', EventValidator, createEvent);
+
+router.get('/:id', IdValidator, getEvent);
+router.put('/:id', EventValidator, IdValidator, updateEvent);
+router.delete('/:id', IdValidator, removeEvent);
 
 export default router;

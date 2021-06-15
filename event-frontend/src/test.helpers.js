@@ -1,40 +1,31 @@
-import React from "react";
-import { createStore, applyMiddleware, combineReducers } from "redux";
-import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-import { render as rtlRender } from "@testing-library/react";
-import eventReducer from "./reducers/eventReducer";
-import { initialState as reducerInitialState } from "./reducers/initialState";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import MomentUtils from "@date-io/moment";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { render as rtlRender } from '@testing-library/react';
+import MomentUtils from '@date-io/moment';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-function render(
-  ui,
-  {
-    initialState = reducerInitialState,
-    store = createStore(
-      combineReducers({ eventForm: eventReducer }),
-      initialState,
-      applyMiddleware(thunk)
-    ),
-    ...renderOptions
-  } = {}
-) {
+function render(ui, renderOptions = {}) {
   function Wrapper({ children }) {
     return (
-      <Provider store={store}>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-          {children}
-        </MuiPickersUtilsProvider>
-      </Provider>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        {children}
+      </MuiPickersUtilsProvider>
     );
   }
+
+  Wrapper.propTypes = {
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node,
+    ]),
+  };
+
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 }
 
 // re-export everything
-export * from "@testing-library/react";
+export * from '@testing-library/react';
 
 export { rtlRender };
 

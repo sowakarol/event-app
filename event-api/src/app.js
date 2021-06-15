@@ -1,19 +1,23 @@
-import { connect } from "mongoose";
-import { env, port, mongodbConnectionUrl } from "./config/vars";
-import { mongoDbOptions } from "./config/mongo";
-import { app } from "./config/express";
+import express from 'express';
+import { env, port } from './config/vars';
+import logger from './services/logger';
 
-connect(mongodbConnectionUrl, mongoDbOptions)
-  .then(() => {
-    console.info("Connected to MongoDB", mongodbConnectionUrl);
-  })
-  .catch((err) => {
-    console.error("Error when connecting to MongoDB", err);
-    process.exit(1);
+import loaders from './loaders';
+
+const app = express();
+
+const startServer = async ({ app: expressApp }) => {
+  await loaders({ app: expressApp });
+
+  expressApp.listen(port, (err) => {
+    if (err) {
+      logger.error(`Event API ${port} (${env}) terminated:`, err);
+      return;
+    }
+    logger.info(`Event API started on port ${port} (${env})`);
   });
+};
 
-app.listen(port, () =>
-  console.info(`Event API started on port ${port} (${env})`)
-);
+startServer({ app });
 
 export default app;

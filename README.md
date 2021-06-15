@@ -21,9 +21,7 @@ Event API has integration and unit tests (Mocha + Chai + Sinon).
 
 ## Event frontend application
 
-The frontend application enables you to add Event resources. Written in Node.js, Redux, and Material UI. It only contains the Event form (`EventForm` component).
-
-The application has few tests - checks whether the DOM element is rendered with Redux initial state.
+The frontend application enables you to add Event resources. Written in Node.js and Material UI. It only contains the Event form (`EventForm` component).
 
 ## Example
 
@@ -61,8 +59,8 @@ npm run test:{integration|unit}
 
 Validation of Event resource takes place:
 
-1. In the frontend application
-2. In the backend application (`express-validator`)
+1. In the frontend application (`Yup`)
+2. In the backend application (`Joi`)
 3. In MongoDB schema
 
 ### Validation of eventDate field
@@ -73,15 +71,17 @@ I have assumed that some users would want to add an event that has already happe
 ## Technologies
 
 - Node.js
-- Express (with Express validator)
+- Express
 - Docker (+ Docker Compose)
-- React (+ Redux)
+- React
+- Formik
+- Yup
+- Joi
 - Material UI
 - MongoDB
 - Web-based MongoDB admin interface (mongo-express)
 
 ## Future Works
 
-- more frontend tests
 - add swagger
 - JWT authentication
