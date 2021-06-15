@@ -27,4 +27,6 @@ COPY . .
 
 EXPOSE 5000
 
+USER node
+
 CMD [ "npm", "start:dev" ]
