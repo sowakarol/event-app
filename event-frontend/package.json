@@ -16,7 +16,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.2.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "formik": "^2.2.9",
     "moment": "^2.27.0",
     "prop-types": "^15.7.2",
