@@ -21,7 +21,7 @@ Event API has integration and unit tests (Mocha + Chai + Sinon).
 
 ## Event frontend application
 
-The frontend application enables you to add Event resources. Written in Node.js and Material UI. It only contains the Event form (`EventForm` component).
+The frontend application enables you to add Event resources in a simple Event Form. Written in React, Formik and Material UI.
 
 ## Example
 
