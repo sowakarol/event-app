@@ -25,8 +25,21 @@ The frontend application enables you to add Event resources in a simple Event Fo
 
 ## Example
 
-This section contains sample commands that start the application or tests. `docker-compose` tool is required.
+This section contains sample commands that start the application or tests. `npm` and `docker-compose` tools are required.
 
+### Step 0: Install dependencies
+
+Before starting the application stack, install dependencies of `event-api` and `event-frontend`:
+```bash
+cd event-api/
+npm i
+```
+
+```bash
+cd event-frontend/
+npm i
+```
+ 
 ### Starting application stack
 
 To start the whole stack (frontend app + Event API + database with mongo-express), type the following command:
