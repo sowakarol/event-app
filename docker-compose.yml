@@ -55,6 +55,8 @@ services:
       - 8081:8081
     depends_on:
       - mongo
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
 
 networks:
   webnet:
