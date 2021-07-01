@@ -2,17 +2,11 @@ import EntityNotFoundError from '../errors/EntityNotFoundError';
 import Event from '../models/event.model';
 import CreateEventDto from './CreateEventDto';
 import EventDto from './EventDto';
-import logger from './logger';
 
 export const create = async (createEventDto) => {
-  try {
-    const event = CreateEventDto.toEntity(createEventDto);
-    await event.save();
-    return EventDto.fromEntity(event);
-  } catch (err) {
-    logger.warn('Async EventService create error', err);
-    throw err;
-  }
+  const event = CreateEventDto.toEntity(createEventDto);
+  await event.save();
+  return EventDto.fromEntity(event);
 };
 
 export const getAll = async () => {
@@ -21,38 +15,23 @@ export const getAll = async () => {
 };
 
 export const update = async (id, eventDto) => {
-  try {
-    const updatedEntity = await Event.findByIdAndUpdate(id, eventDto, {
-      new: true,
-    });
+  const updatedEntity = await Event.findByIdAndUpdate(id, eventDto, {
+    new: true,
+  });
 
-    return EventDto.fromEntity(updatedEntity);
-  } catch (err) {
-    logger.warn('Async EventService update error', err);
-    throw err;
-  }
+  return EventDto.fromEntity(updatedEntity);
 };
 
 export const remove = async (id) => {
-  try {
-    await Event.findByIdAndRemove(id);
-  } catch (err) {
-    logger.warn('Async EventService remove error', err);
-    throw err;
-  }
+  await Event.findByIdAndRemove(id);
 };
 
 export const get = async (id) => {
-  try {
-    const event = await Event.findById(id);
+  const event = await Event.findById(id);
 
-    if (!event) {
-      throw new EntityNotFoundError('Event', id);
-    }
-
-    return EventDto.fromEntity(event);
-  } catch (err) {
-    logger.warn('Async EventService get error', err);
-    throw err;
+  if (!event) {
+    throw new EntityNotFoundError('Event', id);
   }
+
+  return EventDto.fromEntity(event);
 };
